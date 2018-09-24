@@ -119,7 +119,7 @@ class ModelRun(BaseEntity):
     runId = None
     startTime = None
     endTime = None
-
+    status = "PREPARING"
     metrics = None
     params  = None
 
@@ -134,6 +134,7 @@ class ModelRun(BaseEntity):
     
     def end(self):
         self.endTime = int(time.time())
+        self.status = "DONE"
         logger.info("Model run ended")
     
     def sync(self):
@@ -170,5 +171,6 @@ class ModelRun(BaseEntity):
             "id": self.runId,
             "startTime": self.startTime,
             "endTime": self.endTime,
+            "status": self.status
         }
         return ret
