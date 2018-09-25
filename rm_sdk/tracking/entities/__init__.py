@@ -52,9 +52,12 @@ class ParamList(BaseEntity):
     
 
     def sync(self):
+        if not self.params:
+            logger.info("No params available")
+            return
+        
         logger.info("syncing param data to server")
         resp = tracker.sync_params(self.get_graphql_body())
-        print(resp)
 
     def get_graphql_body(self):
         ret = {
@@ -104,9 +107,11 @@ class MetricList(BaseEntity):
     
 
     def sync(self):
+        if not self.metrics:
+            logger.info("no metrics available")
+            return
         logger.info("syncing metric data to server")
         resp = tracker.sync_metrics(self.get_graphql_body())
-        print(resp)
 
     def get_graphql_body(self):
         ret = {
@@ -130,18 +135,20 @@ class ModelRun(BaseEntity):
     
     def start(self):
         self.startTime = int(time.time())
+        self.status = "RUNNING"
         logger.info("Model run started")
+        self.sync()
     
     def end(self):
         self.endTime = int(time.time())
         self.status = "DONE"
-        logger.info("Model run ended")
+        logger.info("Model run finished")
+        self.sync()
     
     def sync(self):
         ''' Sync data to the server '''
         logger.info("syncing model run data to server")
         resp = tracker.sync_model_run(self.get_graphql_body())
-        print(resp)
 
         self.params.sync()
         self.metrics.sync()
@@ -163,7 +170,6 @@ class ModelRun(BaseEntity):
     
     def __exit__(self, *args):
         self.end()
-        self.sync()
         logger.info("Model run context ended")
     
     def get_graphql_body(self):
