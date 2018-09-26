@@ -5,13 +5,15 @@ class RMTrackingClient(RMGraphQLClientBase):
     
     def sync_model_run(self, modelRun):
         query = '''
-            mutation UpdateRunHistory($id:Int!, $startTime:Int, $endTime:Int, $status:String){
+            mutation UpdateRunHistory($id:String!, $startTime:Date, $endTime:Date, $status:RunStatus){
                 updateRunHistory(
                     id: $id
                     startTime: $startTime
                     endTime: $endTime
                     status: $status
-                )
+                ){
+                    id
+                }
             }
         '''
 

@@ -134,13 +134,13 @@ class ModelRun(BaseEntity):
         self.metrics = MetricList(runId)
     
     def start(self):
-        self.startTime = int(time.time())
+        self.startTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.status = "Running"
         logger.info("Model run started")
         self.sync()
     
     def end(self):
-        self.endTime = int(time.time())
+        self.endTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.status = "Done"
         logger.info("Model run finished")
         self.sync()
