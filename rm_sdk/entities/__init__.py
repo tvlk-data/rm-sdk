@@ -1,6 +1,7 @@
 from datetime import datetime
 import time
 
+from rm_sdk import model
 from rm_sdk.tracking.api_client import tracker
 from rm_sdk.logger import logger
 
@@ -162,6 +163,9 @@ class ModelRun(BaseEntity):
     def log_metric(self, key, val):
         self.metrics.add(key, val)
         logger.info("metric logged with key %s : val %s" % (key, val))
+
+    def upload_model_directory(self, local_dir):
+        model.upload_model_directory(self.run_id, local_dir)
     
     def __enter__(self):
         self.start()

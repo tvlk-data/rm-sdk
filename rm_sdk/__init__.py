@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rm_sdk import tracking
 
-__all__ = ['tracking']
+__all__ = ['tracking', 'entities']
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
