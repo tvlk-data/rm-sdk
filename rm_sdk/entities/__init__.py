@@ -165,7 +165,7 @@ class ModelRun(BaseEntity):
         logger.info("metric logged with key %s : val %s" % (key, val))
 
     def upload_model_directory(self, local_dir):
-        model.upload_model_directory(self.run_id, local_dir)
+        model.upload_model_directory(self.runId, local_dir)
     
     def __enter__(self):
         self.start()
