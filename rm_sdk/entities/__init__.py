@@ -1,9 +1,13 @@
 from datetime import datetime
 import time
+import json
+import os
 
 from rm_sdk import model
 from rm_sdk.tracking.api_client import tracker
 from rm_sdk.logger import logger
+from rm_sdk.utils import file_utils
+
 
 
 class BaseEntity(object):
@@ -130,6 +134,11 @@ class ModelRun(BaseEntity):
     params  = None
 
     def __init__(self, runId):
+        run_history_info = json.loads(tracker.get_run_history(runId))
+        if not run_history_info['data']['getRunHistoryById']:
+            raise ValueError("No data found for this runId")
+        
+        self.model_name = run_history_info['data']['getRunHistoryById']['model']['name']
         self.runId = runId
         self.params = ParamList(runId)
         self.metrics = MetricList(runId)
@@ -154,8 +163,6 @@ class ModelRun(BaseEntity):
         self.params.sync()
         self.metrics.sync()
 
-
-
     def log_param(self, key, val):
         self.params.add(key, val)
         logger.info("param logged with key %s : val %s" % (key, val))
@@ -164,8 +171,16 @@ class ModelRun(BaseEntity):
         self.metrics.add(key, val)
         logger.info("metric logged with key %s : val %s" % (key, val))
 
-    def upload_model_directory(self, local_dir):
-        model.upload_model_directory(self.runId, local_dir)
+    def upload_model_directory(self, local_dir=None):
+        if not local_dir:
+            full_path = os.path.realpath(__file__)
+            local_dir = os.path.dirname(full_path)
+            for i in range(2):
+                local_dir = file_utils.get_parent_dir(local_dir)
+            
+            local_dir = local_dir + '/outputs/models'
+        logger.info("uploading models from %s to GCS" % local_dir)
+        model.upload_model_directory(self, local_dir)
     
     def __enter__(self):
         self.start()
@@ -184,3 +199,6 @@ class ModelRun(BaseEntity):
             "status": self.status
         }
         return ret
+    
+    def __str__(self):
+        return "RunId: %s for Model Name: %s" % (self.runId, self.model_name)
