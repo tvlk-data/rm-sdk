@@ -6,7 +6,7 @@ from rm_sdk.utils.file_utils import build_path, get_relative_path
 
 
 class GoogleCloudStorage(object):
-    def __init__(self, artifact_uri, client=None):
+    def __init__(self, artifact_uri=None, client=None):
         self.artifact_uri = artifact_uri
 
         if client:
