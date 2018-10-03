@@ -181,6 +181,9 @@ class ModelRun(BaseEntity):
         if not local_dir:
             full_path = self.base_path + '/outputs/models'
         else:
+            if not local_dir.startswith('/'):
+                local_dir = "/" + local_dir
+            
             full_path = self.base_path + local_dir
         
         logger.info("uploading models from %s to GCS" % full_path)
