@@ -132,8 +132,9 @@ class ModelRun(BaseEntity):
     status = "Preparing"
     metrics = None
     params  = None
+    base_path = None
 
-    def __init__(self, runId):
+    def __init__(self, runId, base_path):
         run_history_info = json.loads(tracker.get_run_history(runId))
         if not run_history_info['data']['getRunHistoryById']:
             raise ValueError("No data found for this runId")
@@ -142,6 +143,8 @@ class ModelRun(BaseEntity):
         self.runId = runId
         self.params = ParamList(runId)
         self.metrics = MetricList(runId)
+
+        self.base_path = base_path
     
     def start(self):
         self.startTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -172,15 +175,16 @@ class ModelRun(BaseEntity):
         logger.info("metric logged with key %s : val %s" % (key, val))
 
     def upload_model_directory(self, local_dir=None):
+
+        full_path = ''
+
         if not local_dir:
-            full_path = os.path.realpath(__file__)
-            local_dir = os.path.dirname(full_path)
-            for i in range(2):
-                local_dir = file_utils.get_parent_dir(local_dir)
-            
-            local_dir = local_dir + '/outputs/models'
-        logger.info("uploading models from %s to GCS" % local_dir)
-        model.upload_model_directory(self, local_dir)
+            full_path = self.base_path + '/outputs/models'
+        else:
+            full_path = self.base_path + local_dir
+        
+        logger.info("uploading models from %s to GCS" % full_path)
+        model.upload_model_directory(self, full_path)
     
     def __enter__(self):
         self.start()
