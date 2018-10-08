@@ -54,6 +54,23 @@ class RMTrackingClient(RMGraphQLClientBase):
             }
         '''
         return self.execute(query, metrics)
+    
+    def delete_all_params_by_runId(self, runId):
+        query = '''
+            mutation{
+                deleteAllParamsByRunId(runId: "%s")
+            }
+            ''' % runId
+        return self.execute(query)
+    
+    def delete_all_metrics_by_runId(self, runId):
+        query = '''
+            mutation{
+                deleteAllMetricsByRunId(runId: "%s")
+            }
+            ''' % runId
+        return self.execute(query)
+
 
 
 tracker = RMTrackingClient()
