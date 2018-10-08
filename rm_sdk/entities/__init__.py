@@ -63,6 +63,9 @@ class ParamList(BaseEntity):
         
         logger.info("syncing param data to server")
         resp = tracker.sync_params(self.get_graphql_body())
+    
+    def delete_all_db_row(self):
+        resp = tracker.delete_all_params_by_runId(self.runId)
 
     def get_graphql_body(self):
         ret = {
@@ -117,6 +120,9 @@ class MetricList(BaseEntity):
             return
         logger.info("syncing metric data to server")
         resp = tracker.sync_metrics(self.get_graphql_body())
+    
+    def delete_all_db_row(self):
+        resp = tracker.delete_all_metrics_by_runId(self.runId)
 
     def get_graphql_body(self):
         ret = {
@@ -133,8 +139,9 @@ class ModelRun(BaseEntity):
     metrics = None
     params  = None
     base_path = None
+    delete_old_data = True
 
-    def __init__(self, runId, base_path):
+    def __init__(self, runId, base_path, delete_old_data=True):
         run_history_info = json.loads(tracker.get_run_history(runId))
         if not run_history_info['data']['getRunHistoryById']:
             raise ValueError("No data found for this runId")
@@ -145,6 +152,7 @@ class ModelRun(BaseEntity):
         self.metrics = MetricList(runId)
 
         self.base_path = base_path
+        self.delete_old_data = delete_old_data
     
     def start(self):
         self.startTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -163,6 +171,10 @@ class ModelRun(BaseEntity):
         logger.info("syncing model run data to server")
         resp = tracker.sync_model_run(self.get_graphql_body())
 
+        if self.delete_old_data:
+            self.params.delete_all_db_row()
+            self.metrics.delete_all_db_row()
+        
         self.params.sync()
         self.metrics.sync()
 
