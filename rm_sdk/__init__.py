@@ -3,4 +3,4 @@ from rm_sdk import tracking
 
 __all__ = ['tracking', 'entities']
 
-__version__ = "0.0.4"
+__version__ = "1.0.0"
