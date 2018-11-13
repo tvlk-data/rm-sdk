@@ -29,6 +29,12 @@ class GoogleCloudStorage(object):
             path = path[1:]
         return parsed.netloc, path
     
+    def get_artifact(self):
+        (bucket, dest_path) = self.parse_uri(self.artifact_uri)
+        gcs_bucket = self.gcs.Client().get_bucket(bucket)
+        blob = gcs_bucket.get_blob(dest_path)
+        return blob
+    
     def log_artifact(self, local_file, artifact_path=None):
         (bucket, dest_path) = self.parse_uri(self.artifact_uri)
         if artifact_path:
