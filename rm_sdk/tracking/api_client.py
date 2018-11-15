@@ -70,7 +70,3 @@ class RMTrackingClient(RMGraphQLClientBase):
             }
             ''' % runId
         return self.execute(query)
-
-
-
-tracker = RMTrackingClient()

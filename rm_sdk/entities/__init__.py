@@ -4,17 +4,15 @@ import json
 import os
 
 from rm_sdk import model
-from rm_sdk.tracking.api_client import tracker
+
 from rm_sdk.logger import logger
 from rm_sdk.utils import file_utils
-
 
 
 class BaseEntity(object):
 
     def get_graphql_body(self):
         raise NotImplementedError
-
 
 class Param(BaseEntity):
     runId = None
@@ -47,9 +45,10 @@ class ParamList(BaseEntity):
     runId = None
     params = []
 
-    def __init__(self, runId, params=[]):
+    def __init__(self, rm_client, runId, params=[]):
         self.runId = runId
         self.params = params
+        self.rm_client = rm_client
     
     def add(self, key, val):
         param = Param(self.runId, key, val)
@@ -62,10 +61,10 @@ class ParamList(BaseEntity):
             return
         
         logger.info("syncing param data to server")
-        resp = tracker.sync_params(self.get_graphql_body())
+        resp = self.rm_client.tracker.sync_params(self.get_graphql_body())
     
     def delete_all_db_row(self):
-        resp = tracker.delete_all_params_by_runId(self.runId)
+        resp = self.rm_client.tracker.delete_all_params_by_runId(self.runId)
 
     def get_graphql_body(self):
         ret = {
@@ -105,9 +104,10 @@ class MetricList(BaseEntity):
     runId = None
     metrics = []
 
-    def __init__(self, runId, metrics=[]):
+    def __init__(self, rm_client, runId, metrics=[]):
         self.runId = runId
         self.metrics = metrics
+        self.rm_client = rm_client
     
     def add(self, key, val):
         metric = Metric(self.runId, key, val)
@@ -119,10 +119,10 @@ class MetricList(BaseEntity):
             logger.info("no metrics available")
             return
         logger.info("syncing metric data to server")
-        resp = tracker.sync_metrics(self.get_graphql_body())
+        resp = self.rm_client.tracker.sync_metrics(self.get_graphql_body())
     
     def delete_all_db_row(self):
-        resp = tracker.delete_all_metrics_by_runId(self.runId)
+        resp = self.rm_client.tracker.delete_all_metrics_by_runId(self.runId)
 
     def get_graphql_body(self):
         ret = {
@@ -141,15 +141,17 @@ class ModelRun(BaseEntity):
     base_path = None
     delete_old_data = True
 
-    def __init__(self, runId, base_path, delete_old_data=True):
-        run_history_info = json.loads(tracker.get_run_history(runId))
+    def __init__(self, rm_client, runId, base_path, delete_old_data=True):
+        self.rm_client = rm_client
+
+        run_history_info = json.loads(self.rm_client.tracker.get_run_history(runId))
         if not run_history_info['data']['getRunHistoryById']:
             raise ValueError("No data found for this runId")
         
         self.model_name = run_history_info['data']['getRunHistoryById']['model']['name']
         self.runId = runId
-        self.params = ParamList(runId)
-        self.metrics = MetricList(runId)
+        self.params = ParamList(self.rm_client, runId)
+        self.metrics = MetricList(self.rm_client, runId)
 
         self.base_path = base_path
         self.delete_old_data = delete_old_data
@@ -169,7 +171,7 @@ class ModelRun(BaseEntity):
     def sync(self):
         ''' Sync data to the server '''
         logger.info("syncing model run data to server")
-        resp = tracker.sync_model_run(self.get_graphql_body())
+        resp = self.rm_client.tracker.sync_model_run(self.get_graphql_body())
 
         if self.delete_old_data:
             self.params.delete_all_db_row()
