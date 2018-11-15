@@ -1,10 +1,14 @@
 import os
-from rm_sdk.entities import ModelRun
+from rm_sdk.client import RMClient
 
 
 base_path = os.path.dirname(os.path.realpath(__file__))
 
-with ModelRun("c75ecf51-db02-4488-a3a7-08f421695199", base_path) as model_run:
+config = {}
+
+client = RMClient(config)
+
+with client.create_model_run("c75ecf51-db02-4488-a3a7-08f421695199", base_path) as model_run:
     model_run.log_param('abc', 'pqa')
     model_run.log_param('pq', '2324234')
     model_run.log_metric('mete1', 'wewrwe')

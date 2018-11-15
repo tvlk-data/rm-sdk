@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from rm_sdk import tracking
+from .client import RMClient
 
-__all__ = ['tracking', 'entities']
+__all__ = ['client']
 
-__version__ = "2.0.0"
+__version__ = "3.0.0"
