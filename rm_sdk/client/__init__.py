@@ -11,7 +11,7 @@ class RMConfig(object):
     self._config['RM_GRAPHQL_API_URL'] = config_dict['RM_GRAPHQL_API_URL'] # required
     self._config['AUTH0_CONFIG'] = config_dict.get('AUTH0_CONFIG') # optional
     self._config['AUTH0_TOKEN'] = self.get_auth0_token()
-    self._config['MODEL_UPLOAD_URI'] = config_dict.get('MODELD_UPLOAD_URI', 'gs://rm-run-outputs')
+    self._config['MODEL_UPLOAD_URI'] = config_dict.get('MODEL_UPLOAD_URI', 'gs://rm-run-outputs')
   
   def get(self, key):
     return self._config.get(key)
@@ -47,7 +47,7 @@ class RMClient(object):
     else:
       raise AssertionError('configuration is not a dict of RMConfig object')
     
-    self.tracker = RMTrackingClient(self._config.get('RM_GRAPHQL_API_URL'), self._config.get('AUTH_TOKEN'))
+    self.tracker = RMTrackingClient(self._config.get('RM_GRAPHQL_API_URL'), self._config.get('AUTH0_TOKEN'))
 
   def create_model_run(self, runId, base_path, delete_old_data=True):
     return ModelRun(self, runId, base_path, delete_old_data)
