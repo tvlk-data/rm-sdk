@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rm_sdk.api_client import RMGraphQLClientBase
 
 
@@ -16,6 +18,29 @@ class RMTrackingClient(RMGraphQLClientBase):
         ''' % (runId)
         
         return self.execute(query)
+    
+    def set_run_as_failed(self, kubeJobId):
+        
+        query = '''
+            mutation updateRunHistoryStatusByKubeJobId($kubeJobId:String!, $status:RunStatus!, $endTime:Date){
+                updateRunHistoryStatusByKubeJobId(
+                    kubeJobId: $kubeJobId
+                    status:$status
+                    endTime:$endTime
+                ){
+                    kubeJobId
+                    id
+                    status
+                }
+            }
+        '''
+        variables = {
+            "kubeJobId": kubeJobId,
+            "status": "Failed",
+            "endTime": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
+        
+        return self.execute(query, variables)
 
     def sync_model_run(self, modelRun):
         query = '''

@@ -52,3 +52,6 @@ class RMClient(object):
   def create_model_run(self, runId, base_path, delete_old_data=True):
     return ModelRun(self, runId, base_path, delete_old_data)
   
+  def set_run_as_failed(self, kubeJobId):
+    return self.tracker.set_run_as_failed(kubeJobId)
+  
