@@ -5,6 +5,9 @@ from rm_sdk.api_client import RMGraphQLClientBase
 
 class RMTrackingClient(RMGraphQLClientBase):
     
+    def run_raw_query(self, query, variables={}):
+        return self.execute(query, variables)
+
     def get_run_history(self, runId):
         query = '''
             query {
