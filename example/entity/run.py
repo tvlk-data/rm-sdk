@@ -5,13 +5,14 @@ from rm_sdk.client import RMClient
 base_path = os.path.dirname(os.path.realpath(__file__))
 
 config = {
-'RM_GRAPHQL_API_URL': 'https://asia-northeast1-tvlk-data-dev-179204.cloudfunctions.net/rm-api-dev/graphql',
+    'RM_GRAPHQL_API_URL': '',
     'AUTH0_CONFIG': {
-        'domain': 'tvlk-test.auth0.com',
-        'audience': 'https://rm-api-dev-test',
-        'client_id': 'HIi2te874GNoTTXjLJTyNS4g4qgrZxqZ',
-        'client_secret': 'AZAjwLDiRGVLL7mYxFOiM6ohkvHFTVSjNyVUiRiNz92IK14TYVlDYAlb3gfxaNHl'
-    }
+        'domain': '',
+        'audience': '',
+        'client_id': '',
+        'client_secret': ''
+    },
+    'MODEL_UPLOAD_URI': ''
 }
 
 client = RMClient(config)
