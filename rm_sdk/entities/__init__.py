@@ -190,18 +190,17 @@ class ModelRun(BaseEntity):
 
     def upload_model_directory(self, local_dir=None):
 
-        full_path = ''
+        local_full_path = ''
 
         if not local_dir:
-            full_path = self.base_path + '/outputs/models'
+            local_full_path = self.base_path + '/outputs/models'
         else:
             if not local_dir.startswith('/'):
                 local_dir = "/" + local_dir
             
-            full_path = self.base_path + local_dir
+            local_full_path = self.base_path + local_dir
         
-        logger.info("uploading models from %s to GCS" % full_path)
-        model.upload_model_directory(self, full_path)
+        model.upload_model_directory(self, local_full_path, self.rm_client._config.get('MODEL_UPLOAD_URI'))
     
     def __enter__(self):
         self.start()

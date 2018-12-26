@@ -7,7 +7,7 @@ from io import open
 
 setup(
     name='rm-sdk',
-    version='3.1.2',
+    version='3.2.0',
     keywords=('rm', 'sdk', 'raring meerkat', 'traveloka'),
     description='Python SDK for Raring Meerkat',
     long_description=open("README.rst", encoding="utf-8").read(),
