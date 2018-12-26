@@ -6,17 +6,13 @@ from rm_sdk.utils.file_utils import build_path, get_relative_path
 
 
 class GoogleCloudStorage(object):
-    def __init__(self, artifact_uri=None, client=None):
-        self.artifact_uri = artifact_uri
+    def __init__(self, client=None):
 
         if client:
             self.gcs = client
         else:
             from google.cloud import storage as gcs_storage
             self.gcs = gcs_storage
-    
-    def update_artifact_uri(self, artifact_uri):
-        self.artifact_uri = artifact_uri
 
     @staticmethod
     def parse_uri(uri):
@@ -29,26 +25,22 @@ class GoogleCloudStorage(object):
             path = path[1:]
         return parsed.netloc, path
     
-    def get_artifact(self):
-        (bucket, dest_path) = self.parse_uri(self.artifact_uri)
+    def get_artifact(self, artifact_path):
+        (bucket, dest_path) = self.parse_uri(artifact_path)
         gcs_bucket = self.gcs.Client().get_bucket(bucket)
         blob = gcs_bucket.get_blob(dest_path)
         return blob
     
-    def log_artifact(self, local_file, artifact_path=None):
-        (bucket, dest_path) = self.parse_uri(self.artifact_uri)
-        if artifact_path:
-            dest_path = build_path(dest_path, artifact_path)
+    def log_artifact(self, local_file, artifact_path):
+        (bucket, dest_path) = self.parse_uri(artifact_path)
         dest_path = build_path(dest_path, os.path.basename(local_file))
 
         gcs_bucket = self.gcs.Client().get_bucket(bucket)
         blob = gcs_bucket.blob(dest_path)
         blob.upload_from_filename(local_file)
     
-    def log_artifacts(self, local_dir, artifact_path=None):
-        (bucket, dest_path) = self.parse_uri(self.artifact_uri)
-        if artifact_path:
-            dest_path = build_path(dest_path, artifact_path)
+    def log_artifacts(self, local_dir, artifact_path):
+        (bucket, dest_path) = self.parse_uri(artifact_path)
         gcs_bucket = self.gcs.Client().get_bucket(bucket)
 
         local_dir = os.path.abspath(local_dir)
