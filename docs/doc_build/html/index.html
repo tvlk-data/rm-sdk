@@ -1,0 +1,546 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Welcome to RM-SDK’s documentation! &#8212; RM-SDK 3.2.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-rm-sdk-s-documentation">
+<h1>Welcome to RM-SDK’s documentation!<a class="headerlink" href="#welcome-to-rm-sdk-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p><strong>Raring Meerkat Python SDK</strong></p>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>RM-SDK needs RMConfig object during the construction
+Please check the RM_SDK.RMConfig class for better understanding</p>
+<p>RMConfig object consists of</p>
+<ol class="arabic simple">
+<li>RM_GRAPHQL_API_URL (This variable is required which points to the graphql api)</li>
+<li>MODEL_UPLOAD_URI (This variable is requries for models files upload)</li>
+<li>AUTH0_CONFIG</li>
+</ol>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>pip install git+https://git&#64;github.com/tvlk-data/rm-sdk.git&#64;{version_no}</p>
+<p>You can get the versions from here:</p>
+<p><a class="reference external" href="https://github.com/tvlk-data/rm-sdk/releases">https://github.com/tvlk-data/rm-sdk/releases</a></p>
+</div>
+</div>
+<div class="section" id="module-rm_sdk.client">
+<span id="rm-sdk-client"></span><h1>RM-SDK client<a class="headerlink" href="#module-rm_sdk.client" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="rm_sdk.client.RMClient">
+<em class="property">class </em><code class="descclassname">rm_sdk.client.</code><code class="descname">RMClient</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/client.html#RMClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.client.RMClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is the main entrypoint of the RM-SDK which holds a RMTrackingClient object
+with the property tracker. Any method on on RMTrackingClient can be invoked by tracker
+property. This class also holds a config object</p>
+<dl class="method">
+<dt id="rm_sdk.client.RMClient.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/client.html#RMClient.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.client.RMClient.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor for RMClient</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<a class="reference internal" href="#rm_sdk.client.RMConfig" title="rm_sdk.client.RMConfig"><em>RMConfig</em></a>) – RM-SDK configuration</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">AssertionError</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rm_sdk.client.RMClient.create_model_run">
+<code class="descname">create_model_run</code><span class="sig-paren">(</span><em>runId</em>, <em>base_path</em>, <em>delete_old_data=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/client.html#RMClient.create_model_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.client.RMClient.create_model_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Factory method for creating ModelRun object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>runId</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Run id of the model run on RM</li>
+<li><strong>base_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Base path of the project where base_path/models will hold the generated models</li>
+<li><strong>delete_old_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – whether RM-SDK is allowed to clean up old metrics of the same runId</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">return a ModelRun object which also holds the RM-Configs</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#rm_sdk.entities.ModelRun" title="rm_sdk.entities.ModelRun">ModelRun</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rm_sdk.client.RMClient.set_run_as_failed">
+<code class="descname">set_run_as_failed</code><span class="sig-paren">(</span><em>kubeJobId</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/client.html#RMClient.set_run_as_failed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.client.RMClient.set_run_as_failed" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method to make a run failed on status field by kubeJobId</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kubeJobId</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – a string id of the kube job which is being ran for a ModelRun</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rm_sdk.client.RMConfig">
+<em class="property">class </em><code class="descclassname">rm_sdk.client.</code><code class="descname">RMConfig</code><span class="sig-paren">(</span><em>config_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/client.html#RMConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.client.RMConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the config object class for RM-SDK which will injected to rm-sdk object
+Config object should have this configurations</p>
+<p>RM_GRAPHQL_API_URL (required)</p>
+<p>AUTH0_CONFIG (optional, if provided will use the configuration to get token)</p>
+<p>MODEL_UPLOAD_URI (Optional, if not provided will use default GCS bucket gs://rm-project-artifacts)</p>
+<dl class="method">
+<dt id="rm_sdk.client.RMConfig.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>config_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/client.html#RMConfig.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.client.RMConfig.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor for RMConfig</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – RM-SDK configuration construction data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="rm_sdk.client.RMConfig.check_auth0_config">
+<em class="property">static </em><code class="descname">check_auth0_config</code><span class="sig-paren">(</span><em>auth0_config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/client.html#RMConfig.check_auth0_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.client.RMConfig.check_auth0_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method check whether the auth0_config dict have all the necessary fields</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>auth0_config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – the auth0 configuration dict</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">AttributeError</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rm_sdk.client.RMConfig.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/client.html#RMConfig.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.client.RMConfig.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Config getter method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – key for any configuration property</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Configuration value if exists</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rm_sdk.client.RMConfig.get_auth0_token">
+<code class="descname">get_auth0_token</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/client.html#RMConfig.get_auth0_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.client.RMConfig.get_auth0_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method fetches auth0 token from the given configuration</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>auth0_config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – the auth0 configuration dict</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">AttributeError</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the auth0 generated token or None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)">None</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rm_sdk.tracking.api_client">
+<span id="rm-sdk-tracking"></span><h1>RM-SDK Tracking<a class="headerlink" href="#module-rm_sdk.tracking.api_client" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="rm_sdk.tracking.api_client.RMTrackingClient">
+<em class="property">class </em><code class="descclassname">rm_sdk.tracking.api_client.</code><code class="descname">RMTrackingClient</code><span class="sig-paren">(</span><em>base_url</em>, <em>token=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/tracking/api_client.html#RMTrackingClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.tracking.api_client.RMTrackingClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is the wrapper for api request to the RM-API GraphQL Endpoint</p>
+<dl class="method">
+<dt id="rm_sdk.tracking.api_client.RMTrackingClient.run_raw_query">
+<code class="descname">run_raw_query</code><span class="sig-paren">(</span><em>query</em>, <em>variables={}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/tracking/api_client.html#RMTrackingClient.run_raw_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.tracking.api_client.RMTrackingClient.run_raw_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method can be used for any raw query</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>query</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – graphql query</li>
+<li><strong>variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – vars for the graphql query</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">api response as</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rm_sdk.api_client">
+<span id="rm-sdk-api-client"></span><h1>RM-SDK API Client<a class="headerlink" href="#module-rm_sdk.api_client" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="rm_sdk.api_client.RMGraphQLClientBase">
+<em class="property">class </em><code class="descclassname">rm_sdk.api_client.</code><code class="descname">RMGraphQLClientBase</code><span class="sig-paren">(</span><em>base_url</em>, <em>token=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/api_client.html#RMGraphQLClientBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.api_client.RMGraphQLClientBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is the base class for RM-API Graphql endpoint</p>
+<dl class="method">
+<dt id="rm_sdk.api_client.RMGraphQLClientBase.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>base_url</em>, <em>token=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/api_client.html#RMGraphQLClientBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.api_client.RMGraphQLClientBase.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs the object with base_url where graphql request will be sent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – http url for graphql api</li>
+<li><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – token for graphql api, if provided will set the Authorization header</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rm_sdk.api_client.RMGraphQLClientBase.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><em>query</em>, <em>variable=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/api_client.html#RMGraphQLClientBase.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.api_client.RMGraphQLClientBase.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will execute the graphql query request to RM-API</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>query</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – query string</li>
+<li><strong>variable</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – query variables</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">response of the graphql request</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rm_sdk.entities">
+<span id="rm-sdk-entities"></span><h1>RM-SDK Entities<a class="headerlink" href="#module-rm_sdk.entities" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="rm_sdk.entities.BaseEntity">
+<em class="property">class </em><code class="descclassname">rm_sdk.entities.</code><code class="descname">BaseEntity</code><a class="reference internal" href="_modules/rm_sdk/entities.html#BaseEntity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.BaseEntity" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is the base class of any entity of RM-API</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="rm_sdk.entities.Metric">
+<em class="property">class </em><code class="descclassname">rm_sdk.entities.</code><code class="descname">Metric</code><span class="sig-paren">(</span><em>runId</em>, <em>key</em>, <em>val</em>, <em>generatedAt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#Metric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.Metric" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="rm_sdk.entities.Metric.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>runId</em>, <em>key</em>, <em>val</em>, <em>generatedAt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#Metric.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.Metric.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rm_sdk.entities.MetricList">
+<em class="property">class </em><code class="descclassname">rm_sdk.entities.</code><code class="descname">MetricList</code><span class="sig-paren">(</span><em>rm_client</em>, <em>runId</em>, <em>metrics=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#MetricList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.MetricList" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="rm_sdk.entities.MetricList.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>rm_client</em>, <em>runId</em>, <em>metrics=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#MetricList.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.MetricList.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rm_sdk.entities.ModelRun">
+<em class="property">class </em><code class="descclassname">rm_sdk.entities.</code><code class="descname">ModelRun</code><span class="sig-paren">(</span><em>rm_client</em>, <em>runId</em>, <em>base_path</em>, <em>delete_old_data=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#ModelRun"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.ModelRun" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents the entity of Model Run
+it has with context methods check the __enter__ and __exit__ methods
+One can manually sync to rm-api using the sync method</p>
+<dl class="method">
+<dt id="rm_sdk.entities.ModelRun.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>rm_client</em>, <em>runId</em>, <em>base_path</em>, <em>delete_old_data=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#ModelRun.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.ModelRun.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs the RMClient object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>runId</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Model Run Id</li>
+<li><strong>base_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Absoloute path where the object is being created</li>
+<li><strong>delete_old_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Flag for deleting old data before syncing specially         for metrics and params</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rm_sdk.entities.ModelRun.sync">
+<code class="descname">sync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#ModelRun.sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.ModelRun.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sync data to the server</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rm_sdk.entities.Param">
+<em class="property">class </em><code class="descclassname">rm_sdk.entities.</code><code class="descname">Param</code><span class="sig-paren">(</span><em>runId</em>, <em>key</em>, <em>val</em>, <em>generatedAt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#Param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.Param" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is for dealing with ModelParam entity</p>
+<dl class="method">
+<dt id="rm_sdk.entities.Param.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>runId</em>, <em>key</em>, <em>val</em>, <em>generatedAt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#Param.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.Param.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rm_sdk.entities.ParamList">
+<em class="property">class </em><code class="descclassname">rm_sdk.entities.</code><code class="descname">ParamList</code><span class="sig-paren">(</span><em>rm_client</em>, <em>runId</em>, <em>params=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#ParamList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.ParamList" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is for dealing with a list ModelParam entity</p>
+<dl class="method">
+<dt id="rm_sdk.entities.ParamList.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>rm_client</em>, <em>runId</em>, <em>params=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#ParamList.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.ParamList.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rm_sdk.entities.ParamList.sync">
+<code class="descname">sync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/entities.html#ParamList.sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.entities.ParamList.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will create graphql request to store the model params</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rm_sdk.storage">
+<span id="rm-sdk-storage"></span><h1>RM-SDK Storage<a class="headerlink" href="#module-rm_sdk.storage" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="rm_sdk.storage.GoogleCloudStorage">
+<em class="property">class </em><code class="descclassname">rm_sdk.storage.</code><code class="descname">GoogleCloudStorage</code><span class="sig-paren">(</span><em>client=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/storage.html#GoogleCloudStorage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.storage.GoogleCloudStorage" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class to upload files to GCS</p>
+<dl class="method">
+<dt id="rm_sdk.storage.GoogleCloudStorage.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>client=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/storage.html#GoogleCloudStorage.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.storage.GoogleCloudStorage.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rm_sdk.storage.GoogleCloudStorage.get_artifact">
+<code class="descname">get_artifact</code><span class="sig-paren">(</span><em>artifact_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/storage.html#GoogleCloudStorage.get_artifact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.storage.GoogleCloudStorage.get_artifact" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method can get a file from GCS</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>artifact_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the gcs_uri to download the file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a binary object of the file</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">blob</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rm_sdk.storage.GoogleCloudStorage.log_artifact">
+<code class="descname">log_artifact</code><span class="sig-paren">(</span><em>local_file</em>, <em>artifact_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/storage.html#GoogleCloudStorage.log_artifact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.storage.GoogleCloudStorage.log_artifact" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method can upload a single file to GCS</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>local_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – which local single user wants to upload</li>
+<li><strong>artifact_path</strong> – as what remote file user wants to upload</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rm_sdk.storage.GoogleCloudStorage.log_artifacts">
+<code class="descname">log_artifacts</code><span class="sig-paren">(</span><em>local_dir</em>, <em>artifact_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/storage.html#GoogleCloudStorage.log_artifacts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.storage.GoogleCloudStorage.log_artifacts" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method can upload a folder to GCS</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>local_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – which local folder user wants to upload</li>
+<li><strong>artifact_path</strong> – to which remote folder user wants to upload</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="rm_sdk.storage.GoogleCloudStorage.parse_uri">
+<em class="property">static </em><code class="descname">parse_uri</code><span class="sig-paren">(</span><em>uri</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/storage.html#GoogleCloudStorage.parse_uri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.storage.GoogleCloudStorage.parse_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse an GCS URI, returning (bucket, path)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rm_sdk.model">
+<span id="rm-sdk-model"></span><h1>RM-SDK Model<a class="headerlink" href="#module-rm_sdk.model" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="rm_sdk.model.upload_model_directory">
+<code class="descclassname">rm_sdk.model.</code><code class="descname">upload_model_directory</code><span class="sig-paren">(</span><em>model_run</em>, <em>local_dir</em>, <em>destination_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rm_sdk/model.html#upload_model_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rm_sdk.model.upload_model_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will uploda the local model directory to the GCS bucket</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rm_sdk.logger">
+<span id="rm-sdk-logger"></span><h1>RM-SDK Logger<a class="headerlink" href="#module-rm_sdk.logger" title="Permalink to this headline">¶</a></h1>
+<p>This module is for logging purpose and will set necessary log level</p>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">RM-SDK</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Ahmad Faiyaz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
