@@ -1,13 +1,19 @@
 **Raring Meerkat Python SDK**
 
-Configuration:
+Configuration
+--------------
 
-RM-SDK expects two environment variables for configurations.
+RM-SDK needs RMConfig object during the construction
+Please check the RM_SDK.RMConfig class for better understanding
+
+RMConfig object consists of
 
 1. RM_GRAPHQL_API_URL (This variable is required which points to the graphql api)
-2. MODEL_UPLOAD_URI (This variable is optional if you want to use different bucket, then set a value for this variable.)
+2. MODEL_UPLOAD_URI (This variable is requries for models files upload)
+3. AUTH0_CONFIG 
 
-Installation:
+Installation
+-------------
 
 pip install git+https://git@github.com/tvlk-data/rm-sdk.git@{version_no}
 
