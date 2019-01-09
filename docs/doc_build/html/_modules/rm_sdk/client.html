@@ -1,0 +1,236 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>rm_sdk.client &#8212; RM-SDK 3.2.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for rm_sdk.client</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">rm_sdk.entities</span> <span class="k">import</span> <span class="n">ModelRun</span>
+<span class="kn">from</span> <span class="nn">rm_sdk.tracking.api_client</span> <span class="k">import</span> <span class="n">RMTrackingClient</span>
+<span class="kn">from</span> <span class="nn">rm_sdk.utils.http_utils</span> <span class="k">import</span> <span class="n">get_auth0_token</span>
+
+
+<div class="viewcode-block" id="RMConfig"><a class="viewcode-back" href="../../index.html#rm_sdk.client.RMConfig">[docs]</a><span class="k">class</span> <span class="nc">RMConfig</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the config object class for RM-SDK which will injected to rm-sdk object</span>
+<span class="sd">    Config object should have this configurations</span>
+<span class="sd">    </span>
+<span class="sd">    RM_GRAPHQL_API_URL (required)</span>
+<span class="sd">    </span>
+<span class="sd">    AUTH0_CONFIG (optional, if provided will use the configuration to get token)</span>
+<span class="sd">    </span>
+<span class="sd">    MODEL_UPLOAD_URI (Optional, if not provided will use default GCS bucket gs://rm-project-artifacts)</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">config_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;RM_GRAPHQL_API_URL&#39;</span><span class="p">,</span> <span class="s1">&#39;AUTH0_CONFIG&#39;</span><span class="p">,</span> <span class="s1">&#39;MODEL_UPLOAD_URI&#39;</span><span class="p">]</span>
+  
+<div class="viewcode-block" id="RMConfig.__init__"><a class="viewcode-back" href="../../index.html#rm_sdk.client.RMConfig.__init__">[docs]</a>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Constructor for RMConfig</span>
+<span class="sd">    </span>
+<span class="sd">      :param config_dict: RM-SDK configuration construction data</span>
+<span class="sd">      :type config_dict: dict</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="bp">self</span><span class="o">.</span><span class="n">_config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;RM_GRAPHQL_API_URL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config_dict</span><span class="p">[</span><span class="s1">&#39;RM_GRAPHQL_API_URL&#39;</span><span class="p">]</span> <span class="c1"># required</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;AUTH0_CONFIG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;AUTH0_CONFIG&#39;</span><span class="p">)</span> <span class="c1"># optional</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;AUTH0_TOKEN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_auth0_token</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;MODEL_UPLOAD_URI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MODEL_UPLOAD_URI&#39;</span><span class="p">)</span></div>
+  
+<div class="viewcode-block" id="RMConfig.get"><a class="viewcode-back" href="../../index.html#rm_sdk.client.RMConfig.get">[docs]</a>  <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Config getter method</span>
+<span class="sd">      </span>
+<span class="sd">      :param key: key for any configuration property</span>
+<span class="sd">      :type key: str</span>
+<span class="sd">      </span>
+<span class="sd">      :return: Configuration value if exists</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></div>
+  
+<div class="viewcode-block" id="RMConfig.check_auth0_config"><a class="viewcode-back" href="../../index.html#rm_sdk.client.RMConfig.check_auth0_config">[docs]</a>  <span class="nd">@staticmethod</span>
+  <span class="k">def</span> <span class="nf">check_auth0_config</span><span class="p">(</span><span class="n">auth0_config</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      This method check whether the auth0_config dict have all the necessary fields</span>
+<span class="sd">      </span>
+<span class="sd">      :param auth0_config: the auth0 configuration dict</span>
+<span class="sd">      :type auth0_config: dict</span>
+<span class="sd">      </span>
+<span class="sd">      :raises: AttributeError</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">auth0_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">return</span>
+    
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;domain&#39;</span><span class="p">,</span> <span class="s1">&#39;audience&#39;</span><span class="p">,</span> <span class="s1">&#39;client_id&#39;</span><span class="p">,</span> <span class="s1">&#39;client_secret&#39;</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">auth0_config</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">field</span> <span class="o">+</span> <span class="s2">&quot;is not found on Auth0 config&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+  
+<div class="viewcode-block" id="RMConfig.get_auth0_token"><a class="viewcode-back" href="../../index.html#rm_sdk.client.RMConfig.get_auth0_token">[docs]</a>  <span class="k">def</span> <span class="nf">get_auth0_token</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      This method fetches auth0 token from the given configuration</span>
+<span class="sd">      </span>
+<span class="sd">      :param auth0_config: the auth0 configuration dict</span>
+<span class="sd">      :type auth0_config: dict</span>
+<span class="sd">      </span>
+<span class="sd">      :raises: AttributeError</span>
+<span class="sd">      :return: returns the auth0 generated token or None</span>
+<span class="sd">      :rtype: None or str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;AUTH0_CONFIG&#39;</span><span class="p">]:</span>
+      <span class="k">return</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">check_auth0_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;AUTH0_CONFIG&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">get_auth0_token</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;AUTH0_CONFIG&#39;</span><span class="p">])</span></div></div>
+    
+  
+
+<div class="viewcode-block" id="RMClient"><a class="viewcode-back" href="../../index.html#rm_sdk.client.RMClient">[docs]</a><span class="k">class</span> <span class="nc">RMClient</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is the main entrypoint of the RM-SDK which holds a RMTrackingClient object</span>
+<span class="sd">    with the property tracker. Any method on on RMTrackingClient can be invoked by tracker</span>
+<span class="sd">    property. This class also holds a config object</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="RMClient.__init__"><a class="viewcode-back" href="../../index.html#rm_sdk.client.RMClient.__init__">[docs]</a>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Constructor for RMClient</span>
+<span class="sd">      </span>
+<span class="sd">      :param config: RM-SDK configuration</span>
+<span class="sd">      :type config: RMConfig</span>
+<span class="sd">      :raises: AssertionError</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="nb">dict</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_config</span> <span class="o">=</span> <span class="n">RMConfig</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">RMConfig</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_config</span> <span class="o">=</span> <span class="n">config</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s1">&#39;configuration is not a dict of RMConfig object&#39;</span><span class="p">)</span>
+    
+    <span class="bp">self</span><span class="o">.</span><span class="n">tracker</span> <span class="o">=</span> <span class="n">RMTrackingClient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;RM_GRAPHQL_API_URL&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;AUTH0_TOKEN&#39;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="RMClient.create_model_run"><a class="viewcode-back" href="../../index.html#rm_sdk.client.RMClient.create_model_run">[docs]</a>  <span class="k">def</span> <span class="nf">create_model_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runId</span><span class="p">,</span> <span class="n">base_path</span><span class="p">,</span> <span class="n">delete_old_data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Factory method for creating ModelRun object.</span>
+
+<span class="sd">      :param runId: Run id of the model run on RM</span>
+<span class="sd">      :type runId: str</span>
+<span class="sd">      :param base_path: Base path of the project where base_path/models will hold the generated models</span>
+<span class="sd">      :type base_path: str</span>
+<span class="sd">      :param delete_old_data: whether RM-SDK is allowed to clean up old metrics of the same runId</span>
+<span class="sd">      :type delete_old_data: bool</span>
+<span class="sd">      </span>
+<span class="sd">      :return: return a ModelRun object which also holds the RM-Configs</span>
+<span class="sd">      :rtype: ModelRun</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ModelRun</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runId</span><span class="p">,</span> <span class="n">base_path</span><span class="p">,</span> <span class="n">delete_old_data</span><span class="p">)</span></div>
+  
+<div class="viewcode-block" id="RMClient.set_run_as_failed"><a class="viewcode-back" href="../../index.html#rm_sdk.client.RMClient.set_run_as_failed">[docs]</a>  <span class="k">def</span> <span class="nf">set_run_as_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kubeJobId</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A method to make a run failed on status field by kubeJobId</span>
+<span class="sd">    </span>
+<span class="sd">    :param kubeJobId: a string id of the kube job which is being ran for a ModelRun</span>
+<span class="sd">    :type kubeJobId: str</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tracker</span><span class="o">.</span><span class="n">set_run_as_failed</span><span class="p">(</span><span class="n">kubeJobId</span><span class="p">)</span></div></div>
+  
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">RM-SDK</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Ahmad Faiyaz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
