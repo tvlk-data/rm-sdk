@@ -1,6 +1,7 @@
 import sys
 import logging
-
+"""This module is for logging purpose and will set necessary log level
+"""
 class _MaxLevelFilter(object):
     def __init__(self, highest_log_level):
         self._highest_log_level = highest_log_level

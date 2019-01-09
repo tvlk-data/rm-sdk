@@ -10,6 +10,15 @@ def retry_if_exception(exception):
 
 @retry(retry_on_exception=retry_if_exception, stop_max_attempt_number=3, wait_random_min=1000, wait_random_max=2000)
 def get_auth0_token(auth0_data):
+    """This method fetchs Auth0 token with provided configurations
+      This method has a retry mechanism which will use the retry_if_exception handler
+      to validate exceptions
+      :param auth0_data: a dict with required auth0 configuration fields
+      :type auth0_data: dict
+      :return: returns the token generated from Auth0 api
+      :rtype: str
+      :raises: HTTPException
+    """
     AUTH0_DOMAIN = auth0_data['domain']
     AUTH0_RESOURCE_SERVER = auth0_data['audience']
     AUTH0_CLIENT_ID  = auth0_data['client_id']

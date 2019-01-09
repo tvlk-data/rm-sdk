@@ -10,11 +10,14 @@ from rm_sdk.utils import file_utils
 
 
 class BaseEntity(object):
-
+    """This class is the base class of any entity of RM-API
+    """
     def get_graphql_body(self):
         raise NotImplementedError
 
 class Param(BaseEntity):
+    """This class is for dealing with ModelParam entity
+    """
     runId = None
     paramKey = None
     paramValue = None
@@ -41,7 +44,8 @@ class Param(BaseEntity):
 
 
 class ParamList(BaseEntity):
-    
+    """This class is for dealing with a list ModelParam entity
+    """
     runId = None
     params = []
 
@@ -56,6 +60,8 @@ class ParamList(BaseEntity):
     
 
     def sync(self):
+        """This method will create graphql request to store the model params
+        """
         if not self.params:
             logger.info("No params available")
             return
@@ -132,6 +138,10 @@ class MetricList(BaseEntity):
 
 
 class ModelRun(BaseEntity):
+    """This class represents the entity of Model Run
+       it has with context methods check the __enter__ and __exit__ methods
+       One can manually sync to rm-api using the sync method
+    """
     runId = None
     startTime = None
     endTime = None
