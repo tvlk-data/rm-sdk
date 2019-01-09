@@ -152,6 +152,18 @@ class ModelRun(BaseEntity):
     delete_old_data = True
 
     def __init__(self, rm_client, runId, base_path, delete_old_data=True):
+        """
+        Constructs the RMClient object
+        
+        :param runId: Model Run Id
+        :type runId: str
+        :param base_path: Absoloute path where the object is being created
+        :type base_path: str
+        :param delete_old_data: Flag for deleting old data before syncing specially \
+        for metrics and params
+        :type delete_old_data: bool
+        
+        """
         self.rm_client = rm_client
 
         run_history_info = json.loads(self.rm_client.tracker.get_run_history(runId))

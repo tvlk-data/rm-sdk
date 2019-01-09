@@ -9,12 +9,14 @@ class RMTrackingClient(RMGraphQLClientBase):
 
     def run_raw_query(self, query, variables={}):
         """This method can be used for any raw query
+           
            :param query: graphql query
            :type query: str
            :param variables: vars for the graphql query
            :type variables: dict
+           
            :return: api response as
-           :ret type: str
+           :rtype: str
         """
         return self.execute(query, variables)
 
