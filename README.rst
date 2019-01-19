@@ -20,3 +20,19 @@ pip install git+https://git@github.com/tvlk-data/rm-sdk.git@{version_no}
 You can get the versions from here:
 
 https://github.com/tvlk-data/rm-sdk/releases
+
+Creating Documentation
+----------------------
+
+
+Due to the fact that not all machine have the same specification to build the documentation,
+we can use `Makefile` to build a Docker image and use the image to build documentation.
+
+
+$ make docker-build
+
+$ docker run -it -v $(PWD):/tmp/tmp rm-sdk:latest  bash
+
+$ cd docs
+
+$ make html
